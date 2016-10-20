@@ -1,6 +1,7 @@
 import os
 
 
+
 class gloable:
     variable_count = 0
     function_count = 0
@@ -17,10 +18,10 @@ class gloable:
     double_var = []
     sturct_var = []
     short_var = []
-	long_var = []
-	char_var = []
-	bool_var = []
-	byte = []
+    long_var = []
+    char_var = []
+    bool_var = []
+    byte = []
 
 
     def putCount(self, type, value):
@@ -51,3 +52,13 @@ class key_words:
                       "int", "interface", "long", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "true", "void", "while"]
     cpp_key_words = ["Asm", "auto", "bool", "break", "case", "catch", "char", "class", "const_cast", "continue", "default", "delete", "do", "double", "else", "enum", "dynamic_cast", "extern", "false", "float", "for", "union", "unsigned", "using", "friend", "goto", "if", "inline", "int", "long", "mutable",
                      "virtual", "namespace", "new", "operator", "private", "protected", "public", "register", "void", "reinterpret_cast", "return", "short", "signed", "sizeof", "static", "static_cast", "volatile", "struct", "switch", "template", "this", "throw", "true", "try", "typedef", "typeid", "unsigned", "wchar_t", "while"]
+
+
+class gloable_classes:
+    gloable_obj = gloable()
+    key_words_obj = key_words()
+
+
+def setupGloable(module):
+    module.class_gloable = gloable_classes()
+    return module

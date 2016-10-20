@@ -9,6 +9,16 @@ from modules.loops import *
 from modules.variable import *
 from PyQt4 import QtCore, QtGui
 
+class moduleMix:
+    class_gloable = ""
+    class_ui = ""
+    class_filemgr = ""
+    class_const = ""
+    class_function = ""
+    class_loops = ""
+    class_variable = ""
+
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -17,28 +27,23 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
-
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-
-class Ui_MainWindow(object):
-
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(640, 601)
-        sizePolicy = QtGui.QSizePolicy(
-            QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+class Ui_mainWindow(object):
+    def setupUi(self, mainWindow):
+        mainWindow.setObjectName(_fromUtf8("mainWindow"))
+        mainWindow.resize(1200, 640)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMaximumSize(QtCore.QSize(640, 640))
-        self.centralwidget = QtGui.QWidget(MainWindow)
+        sizePolicy.setHeightForWidth(mainWindow.sizePolicy().hasHeightForWidth())
+        mainWindow.setSizePolicy(sizePolicy)
+        mainWindow.setMaximumSize(QtCore.QSize(1200, 640))
+        self.centralwidget = QtGui.QWidget(mainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 0, 81, 17))
@@ -133,7 +138,7 @@ class Ui_MainWindow(object):
         self.label_15.setGeometry(QtCore.QRect(260, 230, 121, 20))
         self.label_15.setObjectName(_fromUtf8("label_15"))
         self.line_5 = QtGui.QFrame(self.centralwidget)
-        self.line_5.setGeometry(QtCore.QRect(-20, 480, 671, 20))
+        self.line_5.setGeometry(QtCore.QRect(-20, 480, 681, 20))
         self.line_5.setFrameShape(QtGui.QFrame.HLine)
         self.line_5.setFrameShadow(QtGui.QFrame.Sunken)
         self.line_5.setObjectName(_fromUtf8("line_5"))
@@ -168,64 +173,99 @@ class Ui_MainWindow(object):
         self.ComplexView = QtGui.QListWidget(self.centralwidget)
         self.ComplexView.setGeometry(QtCore.QRect(10, 260, 621, 221))
         self.ComplexView.setObjectName(_fromUtf8("ComplexView"))
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 640, 23))
+        self.line_6 = QtGui.QFrame(self.centralwidget)
+        self.line_6.setGeometry(QtCore.QRect(650, 0, 20, 671))
+        self.line_6.setFrameShape(QtGui.QFrame.VLine)
+        self.line_6.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line_6.setObjectName(_fromUtf8("line_6"))
+        self.label_20 = QtGui.QLabel(self.centralwidget)
+        self.label_20.setGeometry(QtCore.QRect(680, 10, 81, 17))
+        self.label_20.setObjectName(_fromUtf8("label_20"))
+        self.Terminal = QtGui.QListWidget(self.centralwidget)
+        self.Terminal.setGeometry(QtCore.QRect(680, 40, 511, 551))
+        self.Terminal.setObjectName(_fromUtf8("Terminal"))
+        mainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtGui.QMenuBar(mainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 23))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
+        mainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtGui.QStatusBar(mainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
-        self.actionProgram_file = QtGui.QAction(MainWindow)
+        mainWindow.setStatusBar(self.statusbar)
+        self.actionProgram_file = QtGui.QAction(mainWindow)
         self.actionProgram_file.setObjectName(_fromUtf8("actionProgram_file"))
-        self.actionProgram_folder = QtGui.QAction(MainWindow)
-        self.actionProgram_folder.setObjectName(
-            _fromUtf8("actionProgram_folder"))
+        self.actionProgram_folder = QtGui.QAction(mainWindow)
+        self.actionProgram_folder.setObjectName(_fromUtf8("actionProgram_folder"))
         self.menuFile.addAction(self.actionProgram_file)
         self.menuFile.addAction(self.actionProgram_folder)
         self.menubar.addAction(self.menuFile.menuAction())
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        #self.Load.clicked.connect(self.Load_clicked())
+        self.retranslateUi(mainWindow)
+        QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "Code Elixer", None))
-        self.label.setText(_translate("MainWindow", "File : ", None))
-        self.label_2.setText(_translate("MainWindow", "folder : ", None))
-        self.Load.setText(_translate("MainWindow", "Load", None))
-        self.FilePath.setText(_translate("MainWindow", "<content>", None))
-        self.FolderPath.setText(_translate("MainWindow", "<content>", None))
-        self.label_5.setText(_translate("MainWindow", "Variables", None))
-        self.label_6.setText(_translate("MainWindow", "Memory", None))
-        self.label_7.setText(_translate("MainWindow", "Count", None))
-        self.label_8.setText(_translate("MainWindow", "Used", None))
-        self.label_9.setText(_translate("MainWindow", "Unused", None))
-        self.label_10.setText(_translate("MainWindow", "Functions", None))
-        self.label_11.setText(_translate("MainWindow", "Calls", None))
-        self.label_12.setText(_translate("MainWindow", "Recursive", None))
-        self.label_13.setText(_translate("MainWindow", "Constants", None))
-        self.label_14.setText(_translate("MainWindow", "Memory", None))
-        self.label_15.setText(_translate("MainWindow", "Complexity Tree", None))
-        self.label_16.setText(_translate("MainWindow", "Total Memory Used", None))
-        self.label_17.setText(_translate("MainWindow", "Total Calls Made", None))
-        self.label_18.setText(_translate("MainWindow", "Rating", None))
-        self.label_19.setText(_translate("MainWindow", "Time Complexity ", None))
-        self.menuFile.setTitle(_translate("MainWindow", "file", None))
-        self.actionProgram_file.setText(_translate("MainWindow", "program file", None))
-        self.actionProgram_folder.setText(_translate("MainWindow", "program folder", None))
+    def retranslateUi(self, mainWindow):
+        mainWindow.setWindowTitle(_translate("mainWindow", "Code Elixer", None))
+        self.label.setText(_translate("mainWindow", "File : ", None))
+        self.label_2.setText(_translate("mainWindow", "folder : ", None))
+        self.Load.setText(_translate("mainWindow", "Load", None))
+        self.FilePath.setText(_translate("mainWindow", "<content>", None))
+        self.FolderPath.setText(_translate("mainWindow", "<content>", None))
+        self.label_5.setText(_translate("mainWindow", "Variables", None))
+        self.label_6.setText(_translate("mainWindow", "Memory", None))
+        self.label_7.setText(_translate("mainWindow", "Count", None))
+        self.label_8.setText(_translate("mainWindow", "Used", None))
+        self.label_9.setText(_translate("mainWindow", "Unused", None))
+        self.label_10.setText(_translate("mainWindow", "Functions", None))
+        self.label_11.setText(_translate("mainWindow", "Calls", None))
+        self.label_12.setText(_translate("mainWindow", "Recursive", None))
+        self.label_13.setText(_translate("mainWindow", "Constants", None))
+        self.label_14.setText(_translate("mainWindow", "Memory", None))
+        self.label_15.setText(_translate("mainWindow", "Complexity Tree", None))
+        self.label_16.setText(_translate("mainWindow", "Total Memory Used", None))
+        self.label_17.setText(_translate("mainWindow", "Total Calls Made", None))
+        self.label_18.setText(_translate("mainWindow", "Rating", None))
+        self.label_19.setText(_translate("mainWindow", "Time Complexity ", None))
+        self.label_20.setText(_translate("mainWindow", "Terminal", None))
+        self.menuFile.setTitle(_translate("mainWindow", "file", None))
+        self.actionProgram_file.setText(_translate("mainWindow", "program file", None))
+        self.actionProgram_folder.setText(_translate("mainWindow", "program folder", None))
+
 
     def Load_clicked(self):
         print("clicked")
+
+    def printTerminal(self,value):
+        ui.Terminal.addItem(value)
+
+def printTerminal(module,value):
+    module.class_ui.Terminal.addItem(value)
+
 
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
     MainWindow = QtGui.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_mainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    module = moduleMix()
+    module.class_ui = ui
+    module = setupGloable(module)
+    module.class_ui.FolderPath.setText("/home/ghostranger/code-elixer/")
+    #module.class_ui.FilePath.setText("/home/ghostranger/code-elixer/modules/constants.py")
+    module.class_ui.TimeComplex.setText("O(N^2)")
+    #manditory
+    module = setupFilmanager(module)
+    module = setupVariable(module)
+    module = setupLoops(module)
+    module = setupConst(module)
+    module = setupFunction(module)
+    #write the code here----------------------------------------------------
+    for i in module.class_const.cconst.const_used:
+        module.class_ui.ConstantView.addItem(str(i))
+    module.class_ui.ConstantMemory.setText(str(module.class_const.cconst.const_memory)+" Byte")
+    #write the code above--------------------------------------------------
     sys.exit(app.exec_())
