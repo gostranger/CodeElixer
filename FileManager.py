@@ -43,17 +43,22 @@ class fileMgr:
     def getFileListNames(self):
         return self.file_name_list
 
-def setupFilmanager(module):
-    f = fileMgr()
-    if str(module.class_ui.FolderPath.text()) != "<content>":
-        f.file_dir = module.class_ui.FolderPath.text()
-        f = listoutfiles(f)
-        f.file_count = len(f.file_list)
-    if str(module.class_ui.FilePath.text()) != "<content>":
-        f.single_file = module.class_ui.FilePath.text()
-        f.file_list.append(str(f.getFile()))
-        f.file_count = f.file_count + 1
-    module.class_filemgr = f
+def setupFilmanager():
+     return fileMgr()
+
+
+def fileLoad(module):
+    module.module.filemgr.file_list = []
+    module.module.filemgr.file_count = 0
+    module.module.filemgr.file_name_list = []
+    if str(module.FolderPath.text()) != "<content>" and str(module.FolderPath.text())!= "":
+        module.module.filemgr.file_dir = module.FolderPath.text()
+        module.module.filemgr = listoutfiles(module.module.filemgr)
+        module.module.filemgr.file_count = len(module.module.filemgr.file_list)
+    if str(module.FilePath.text()) != "<content>" and str(module.FilePath.text())!= "":
+        module.module.filemgr.single_file = module.FilePath.text()
+        module.module.filemgr.file_list.append(str(module.module.filemgr.getFile()))
+        module.module.filemgr.file_count = module.module.filemgr.file_count + 1
     return module
 
 

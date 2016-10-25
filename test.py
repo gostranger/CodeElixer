@@ -19,12 +19,16 @@
 
 
 
+
 import os
-
-
-a = "hello5"
-
-
-
-for i in range(len(a)):
-    print(str(check(a[i])))
+import re
+a = "for(i=0;i<n;i++)"
+print(re.findall(r"for\(.*[;].*[;].*\)", a)[0])  #for loop
+b = "float hello()"
+print(re.findall(r"int .*\(.*\)|float .*\(.*\)",b)[0]) #functions loop
+c = "hello();"
+print(re.findall(r".*\(.*\);",c)[0]) #call functions
+d = "{ hello"
+print(re.findall(r"\{",d))
+print(re.findall(r"[^\{].*",d))
+print(re.findall(r"for\(.*[;].*[;].*\)",d))
