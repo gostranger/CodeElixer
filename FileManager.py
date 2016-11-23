@@ -1,6 +1,7 @@
 import os
 import glob
 import re
+import sqlite3
 
 class fileMgr:
     file_dir ="none"
@@ -8,6 +9,13 @@ class fileMgr:
     file_list = []
     file_name_list = []
     file_count = 0
+    db = ""
+    cursor = ""
+
+    def __init__(self):
+        self.db = sqlite3.connect("CodeElixer.db")
+        self.cursor = self.db.cursor()
+
     class file:
         pointer="none"
         name="none"
@@ -15,6 +23,9 @@ class fileMgr:
 
     def putDir(self,value):
         self.file_dir = value
+
+    def getdbcursor(self):
+        return self.cursor
 
     def getDir(self):
         return self.file_dir

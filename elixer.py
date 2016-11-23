@@ -8,6 +8,8 @@ from modules.constants import *
 from modules.functions import *
 from modules.loops import *
 from modules.variable import *
+from modules.db import *
+from modules.savemgr import *
 from PyQt4.QtGui import QFileDialog
 from PyQt4 import QtCore, QtGui
 sys.path.append("/usr/lib/python2.7/dist-packages/PyQt4/bin/")
@@ -18,6 +20,8 @@ class moduleClass:
     loops = ""
     variable = ""
     gloable = ""
+    db = ""
+    save = ""
 
 
 
@@ -36,6 +40,29 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+class leaderboard(QtGui.QDialog):
+    def __init__(self, parent=None):
+        super(leaderboard, self).__init__(parent)
+        self.setObjectName(_fromUtf8("leaderboardWindow"))
+        self.resize(500, 500)
+        self.setWindowTitle(_translate("mainWindow", "Code Elixer LeaderBoard", None))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(sizePolicy)
+        self.setMaximumSize(QtCore.QSize(500, 500))
+        self.centralwidget = QtGui.QWidget(self)
+        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        #self.buttonBox = QtGui.QDialogButtonBox(self)
+        #self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        #self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.LeadView = QtGui.QListWidget(self.centralwidget)
+        self.LeadView.setGeometry(QtCore.QRect(10, 260, 621, 221))
+        self.LeadView.setObjectName(_fromUtf8("leaderView"))
+        self.verticalLayout = QtGui.QVBoxLayout(self)
+        self.verticalLayout.addWidget(self.LeadView)
+        #self.verticalLayout.addWidget(self.buttonBox)
 
 class Ui_mainWindow(object):
 
@@ -65,6 +92,7 @@ class Ui_mainWindow(object):
         menuFile= ""
         actionProgram_file= ""
         actionProgram_folder= ""
+        lb = ""
 
     def __init__(self):
         self.ui.module = moduleClass()
@@ -74,6 +102,9 @@ class Ui_mainWindow(object):
         self.ui.module.loops = setupLoops()
         self.ui.module.variable = setupVariable()
         self.ui.module.gloable = setupGloable()
+        self.ui.module.db = setupDB()
+        self.ui.module.save = setupsave()
+        self.ui.lb = leaderboard()
 
 
     def setupUi(self, mainWindow):
@@ -96,6 +127,9 @@ class Ui_mainWindow(object):
         self.ui.Load = QtGui.QPushButton(self.centralwidget)
         self.ui.Load.setGeometry(QtCore.QRect(580, 0, 61, 41))
         self.ui.Load.setObjectName(_fromUtf8("Load"))
+        self.ui.save = QtGui.QPushButton(self.centralwidget)
+        self.ui.save.setGeometry(QtCore.QRect(580, 560, 61, 21))
+        self.ui.save.setObjectName(_fromUtf8("save"))
         self.ui.FilePath = QtGui.QLabel(self.centralwidget)
         self.ui.FilePath.setGeometry(QtCore.QRect(100, 0, 411, 17))
         self.ui.FilePath.setObjectName(_fromUtf8("FilePath"))
@@ -209,6 +243,12 @@ class Ui_mainWindow(object):
         self.ui.TimeComplex.setGeometry(QtCore.QRect(460, 530, 131, 21))
         self.ui.TimeComplex.setInputMask(_fromUtf8(""))
         self.ui.TimeComplex.setObjectName(_fromUtf8("TimeComplex"))
+        self.ui.label_21 = QtGui.QLabel(self.centralwidget)
+        self.ui.label_21.setGeometry(QtCore.QRect(40, 560, 141, 20))
+        self.ui.label_21.setObjectName(_fromUtf8("label_21"))
+        self.ui.TotalLoc = QtGui.QLineEdit(self.centralwidget)
+        self.ui.TotalLoc.setGeometry(QtCore.QRect(180, 560, 131, 21))
+        self.ui.TotalLoc.setObjectName(_fromUtf8("TotalLoc"))
         self.ui.ConstantView = QtGui.QListWidget(self.centralwidget)
         self.ui.ConstantView.setGeometry(QtCore.QRect(460, 80, 171, 91))
         self.ui.ConstantView.setObjectName(_fromUtf8("ConstantView"))
@@ -232,6 +272,8 @@ class Ui_mainWindow(object):
         self.ui.menubar.setObjectName(_fromUtf8("menubar"))
         self.ui.menuFile = QtGui.QMenu(self.ui.menubar)
         self.ui.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.ui.menuView = QtGui.QMenu(self.ui.menubar)
+        self.ui.menuView.setObjectName(_fromUtf8("menuView"))
         mainWindow.setMenuBar(self.ui.menubar)
         self.ui.statusbar = QtGui.QStatusBar(mainWindow)
         self.ui.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -240,26 +282,33 @@ class Ui_mainWindow(object):
         self.ui.actionProgram_file.setObjectName(_fromUtf8("actionProgram_file"))
         self.ui.actionProgram_folder = QtGui.QAction(mainWindow)
         self.ui.actionProgram_folder.setObjectName(_fromUtf8("actionProgram_folder"))
+        self.ui.actionProgram_leaderboard = QtGui.QAction(mainWindow)
+        self.ui.actionProgram_leaderboard.setObjectName(_fromUtf8("actionProgram_leaderboard"))
         self.ui.menuFile.addAction(self.ui.actionProgram_file)
         self.ui.menuFile.addAction(self.ui.actionProgram_folder)
+        self.ui.menuView.addAction(self.ui.actionProgram_leaderboard)
         self.ui.menubar.addAction(self.ui.menuFile.menuAction())
+        self.ui.menubar.addAction(self.ui.menuView.menuAction())
         #button action
         self.ui.Load.clicked.connect(self.moduleLoad)
         self.ui.actionProgram_file.triggered.connect(self.filebrowse)
         self.ui.actionProgram_folder.triggered.connect(self.dirbrowse)
+        self.ui.actionProgram_leaderboard.triggered.connect(self.fuc_leaderboard)
+        self.ui.save.clicked.connect(self.savebrowse)
         self.retranslateUi(mainWindow)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
         mainWindow.setWindowTitle(_translate("mainWindow", "Code Elixer", None))
         self.ui.label.setText(_translate("mainWindow", "File : ", None))
-        self.ui.label_2.setText(_translate("mainWindow", "folder : ", None))
+        self.ui.label_2.setText(_translate("mainWindow", "Folder : ", None))
         self.ui.Load.setText(_translate("mainWindow", "Load", None))
+        self.ui.save.setText(_translate("mainWindow","Save",None))
         self.ui.FilePath.setText(_translate("mainWindow", "<content>", None))
         self.ui.FolderPath.setText(_translate("mainWindow", "<content>", None))
         self.ui.label_5.setText(_translate("mainWindow", "Variables", None))
         self.ui.label_6.setText(_translate("mainWindow", "Memory", None))
-        self.ui.label_7.setText(_translate("mainWindow", "Count", None))
+        self.ui.label_7.setText(_translate("mainWindow", "var count", None))
         self.ui.label_8.setText(_translate("mainWindow", "Used", None))
         self.ui.label_9.setText(_translate("mainWindow", "Unused", None))
         self.ui.label_10.setText(_translate("mainWindow", "Functions", None))
@@ -271,11 +320,14 @@ class Ui_mainWindow(object):
         self.ui.label_16.setText(_translate("mainWindow", "Total Memory Used", None))
         self.ui.label_17.setText(_translate("mainWindow", "Total Calls Made", None))
         self.ui.label_18.setText(_translate("mainWindow", "Rating", None))
-        self.ui.label_19.setText(_translate("mainWindow", "Time Complexity ", None))
+        self.ui.label_19.setText(_translate("mainWindow", "f(n)", None))
         self.ui.label_20.setText(_translate("mainWindow", "Terminal", None))
-        self.ui.menuFile.setTitle(_translate("mainWindow", "file", None))
-        self.ui.actionProgram_file.setText(_translate("mainWindow", "program file", None))
-        self.ui.actionProgram_folder.setText(_translate("mainWindow", "program folder", None))
+        self.ui.label_21.setText(_translate("mainWindow", "Total LOC", None))
+        self.ui.menuFile.setTitle(_translate("mainWindow", "File", None))
+        self.ui.menuView.setTitle(_translate("mainWindow","View",None))
+        self.ui.actionProgram_file.setText(_translate("mainWindow", "Open File", None))
+        self.ui.actionProgram_folder.setText(_translate("mainWindow", "Open Folder", None))
+        self.ui.actionProgram_leaderboard.setText(_translate("mainWindow","Leaderboard",None))
 
     def Load_clicked(self):
         self.printTerminal("clicked")
@@ -284,14 +336,57 @@ class Ui_mainWindow(object):
         self.ui.Terminal.addItem(value)
 
     def moduleLoad(self):
+        self.clearimpgloable()
         self.ui.Terminal.clear()
         self.ui.ConstantView.clear()
         self.ui = fileLoad(self.ui)
         self.ui = fetchConstants(self.ui)
+        self.ui = loopanalyse(self.ui)
+        self.ui = CheckDB(self.ui)
+        self.ui = getboard(self.ui)
         self.ui.ConstantMemory.setText(str(self.ui.module.constant.const_memory) + " Byte")
         self.printTerminal("Total Constants Found "+str(self.ui.module.gloable.constant_count))
+        self.ui = fetchVariables(self.ui)
+#...........Mohan's part...............
+        self.printTerminal("Total Variables Found " + str(self.ui.module.gloable.variable_count))
+        self.ui.VarUsedCombo.currentIndexChanged.connect(self.change)
+        self.ui.VarCount.setText(str(self.ui.module.gloable.variable_count) + "")
         self.printTerminal(str(self.ui.module.filemgr.file_count))
+#...........Mohan's part...............
+#...........Manoj's part...............
+        self.ui = fileLoad(self.ui)
+        self.ui.FunctionCombo.currentIndexChanged.connect(self.change_rec)
+        self.ui = fetchFunctions(self.ui)
+        self.ui.FunctionCalls.setText(str(self.ui.module.gloable.function_count) + " Functions")
+        self.printtree("functions found" + str(self.ui.module.functions.fn_used))
+#............Manoj's part....................
+        self.printTerminal("Total Functions found"+ str(self.ui.module.gloable.function_count))
+        # print(len(self.ui.module.gloable.int_var))
+        # print(len(self.ui.module.gloable.float_var))
+        # print(len(self.ui.module.gloable.char_var))
+        # print(len(self.ui.module.gloable.double_var))
+        # print(len(self.ui.module.gloable.short_var))
+        # print(len(self.ui.module.gloable.long_var))
+        # print(len(self.ui.module.gloable.bool_var))
+        # print(len(self.ui.module.gloable.byte))
+        self.ui.TotalMemory.setText(str(len(self.ui.module.gloable.int_var)*2+len(self.ui.module.gloable.float_var)*4+len(self.ui.module.gloable.char_var)+len(self.ui.module.gloable.double_var)*8+len(self.ui.module.gloable.short_var)*1+len(self.ui.module.gloable.long_var)*4+len(self.ui.module.gloable.bool_var)*1+len(self.ui.module.gloable.byte)+self.ui.module.gloable.arr_size)+" Bytes")
+        self.printTerminal("Total LOC"+str(self.ui.module.gloable.total_LOC))
+        self.ui.TotalLoc.setText(str(self.ui.module.gloable.total_LOC))
 
+#...........Mohan's part...............
+    def change(self):
+        var = str(self.ui.VarUsedCombo.currentText())
+        if var.find("[") >= 0:
+            self.ui.VarMemory.setText(str("n Bytes"))
+        elif var.find("int ") >= 0:
+            self.ui.VarMemory.setText(str("2 Bytes"))
+        elif var.find("char ") >= 0:
+            self.ui.VarMemory.setText(str("1 Bytes"))
+        elif var.find("float ") >= 0:
+            self.ui.VarMemory.setText(str("4 Bytes"))
+        elif var.find("boolean ") >= 0:
+            self.ui.VarMemory.setText(str("1 Bytes"))
+#..........Mohan's part ends.........
 
 
     def filebrowse(self):
@@ -302,8 +397,36 @@ class Ui_mainWindow(object):
         folderName = QFileDialog.getExistingDirectory(None, "Select Directory","/home/",QtGui.QFileDialog.ShowDirsOnly)
         self.ui.FolderPath.setText(str(folderName)+"/")
 
+    def savebrowse(self):
+        fileName = QtGui.QFileDialog.getSaveFileName(None, 'Dialog Title', '/home/', selectedFilter='*.elixer')
+        file = file.open(filename,'w+')
 
 
+    def clearimpgloable(self):
+        self.ui.module.gloable.total_LOC=0
+        self.ui.module.gloable.int_var = []
+        self.ui.module.gloable.float_var = []
+        self.ui.module.gloable.double_var = []
+        self.ui.module.gloable.short_var = []
+        self.ui.module.gloable.long_var = []
+        self.ui.module.gloable.char_var = []
+        self.ui.module.gloable.bool_var = []
+        self.ui.module.gloable.byte = []
+
+    def change_rec(self):
+        try:
+            var = self.ui.FunctionCombo.currentText()
+            self.ui.RecursiveCalls.setText(str(self.ui.module.functions.is_recursive[str(var)]))
+        except KeyError:
+            pass
+
+
+    def printtree(self,value):
+        self.ui.ComplexView.addItem(value)
+
+    @QtCore.pyqtSlot()
+    def fuc_leaderboard(self):
+        self.ui.lb.exec_()
 
 
 

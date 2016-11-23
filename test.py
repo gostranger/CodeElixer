@@ -1,34 +1,45 @@
-# import os
-# for root, dirs, files in os.walk("/home/ghostranger/code-elixer/project"):
-#     print files
+from PyQt4 import QtCore, QtGui
+
+class MyDialog(QtGui.QDialog):
+    def __init__(self, parent=None):
+        super(MyDialog, self).__init__(parent)
+
+        self.buttonBox = QtGui.QDialogButtonBox(self)
+        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+
+        self.textBrowser = QtGui.QTextBrowser(self)
+        self.textBrowser.append("This is a QTextBrowser!")
+
+        self.verticalLayout = QtGui.QVBoxLayout(self)
+        self.verticalLayout.addWidget(self.textBrowser)
+        self.verticalLayout.addWidget(self.buttonBox)
+
+class MyWindow(QtGui.QWidget):
+    def __init__(self, parent=None):
+        super(MyWindow, self).__init__(parent)
+
+        self.pushButtonWindow = QtGui.QPushButton(self)
+        self.pushButtonWindow.setText("Click Me!")
+        self.pushButtonWindow.clicked.connect(self.on_pushButton_clicked)
+
+        self.layout = QtGui.QHBoxLayout(self)
+        self.layout.addWidget(self.pushButtonWindow)
+
+        self.dialogTextBrowser = MyDialog(self)
+
+    @QtCore.pyqtSlot()
+    def on_pushButton_clicked(self):
+        self.dialogTextBrowser.exec_()
 
 
-# import os, pprint
-# pprint.pprint([os.path.join(os.path.abspath("/home/ghostranger/code-elixer/"), x[0]) for x in os.walk(os.path.abspath("/home/ghostranger/code-elixer/"))])
+if __name__ == "__main__":
+    import sys
 
-#
-# import os
-# from glob import glob
-#
-# files = []
-# start_dir = os.getcwd()
-# pattern   = "*.*"
-#
-# for dir,_,_ in os.walk(start_dir):
-#     files.extend(glob(os.path.join(dir,pattern)))
+    app = QtGui.QApplication(sys.argv)
+    app.setApplicationName('MyWindow')
 
+    main = MyWindow()
+    main.show()
 
-
-
-import os
-import re
-a = "for(i=0;i<n;i++)"
-print(re.findall(r"for\(.*[;].*[;].*\)", a)[0])  #for loop
-b = "float hello()"
-print(re.findall(r"int .*\(.*\)|float .*\(.*\)",b)[0]) #functions loop
-c = "hello();"
-print(re.findall(r".*\(.*\);",c)[0]) #call functions
-d = "{ hello"
-print(re.findall(r"\{",d))
-print(re.findall(r"[^\{].*",d))
-print(re.findall(r"for\(.*[;].*[;].*\)",d))
+    sys.exit(app.exec_())

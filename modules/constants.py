@@ -20,6 +20,7 @@ def fetchConstants(module):
 
 def checkConst(module,filepointer):
     for line in filepointer.pointer.readlines():
+        module.module.gloable.total_LOC += 1;
         temp = re.findall(r"[-+]?\d*\.\d+|\d+",line)
         for i in temp:
             if i.find(".") == -1:

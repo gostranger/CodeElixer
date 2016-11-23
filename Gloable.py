@@ -3,6 +3,7 @@ import os
 
 
 class gbox:
+    arr_size = 0
     variable_count = 0
     function_count = 0
     constant_count = 0
@@ -16,12 +17,12 @@ class gbox:
     int_var = []
     float_var = []
     double_var = []
-    sturct_var = []
     short_var = []
     long_var = []
     char_var = []
     bool_var = []
     byte = []
+    f_n = ""
     class keywords:
         c = ["auto", "double", "int", "struct", "break", "else", "long", "switch", "case", "enum", "register", "typedef", "char", "extern", "return","union", "const", "float", "short", "unsigned", "continue", "for", "signed", "void", "default", "goto", "sizeof", "volatile", "do", "if", "static", "while"]
         java = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "continue", "default", "do", "double", "else", "extends", "false", "final", "finally", "float", "for", "if", "implements", "import", "instanceof","int", "interface", "long", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "true", "void", "while"]
