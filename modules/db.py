@@ -2,22 +2,25 @@ import os
 import re
 
 class database:
-    cursor = ""
+    rows = []
+
 
 def CheckDB(module):
     cursor = module.module.filemgr.getdbcursor()
-    result = cursor.execute("create table if not exists leaderboard(name varchar(30),loc number(20),fn varchar(200),memory number(50),calls number(50));")
+    cursor.execute("create table if not exists leaderboard(id INTEGER PRIMARY KEY,variable_c number,constants_c number, function_c number,memory number,loc number, calls number)")
     return module
 
 def getboard(module):
     cursor = module.module.filemgr.getdbcursor()
-    cursor.execute("select * from leaderboard");
-    print(str(cursor.rowcount))
+    cursor.execute("select * from leaderboard")
+    for row in cursor:
+        module.module.db.rows.append(row)
     return module
 
-def putdata(module,name,loc,fn,memory,calls):
+def putdata(module,varr,con,fun,mem,loc,calls):
     cursor=module.module.filemgr.getdbcursor()
-    cursor.execute("insert into leaderboard('name',loc,fn,memory,calls) values("+name+","+loc+","+fn+","+memory+","+calls+")")
+    cursor.execute("insert into leaderboard(variable_c,constants_c,function_c,memory,loc,calls) values("+str(varr)+","+str(con)+","+str(fun)+","+str(mem)+","+str(loc)+","+str(calls)+")")
+    module.module.filemgr.db.commit()
     return module
 #manditory do not delete
 def setupDB():

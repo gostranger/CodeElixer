@@ -44,14 +44,14 @@ class leaderboard(QtGui.QDialog):
     def __init__(self, parent=None):
         super(leaderboard, self).__init__(parent)
         self.setObjectName(_fromUtf8("leaderboardWindow"))
-        self.resize(500, 500)
-        self.setWindowTitle(_translate("mainWindow", "Code Elixer LeaderBoard", None))
+        self.resize(700, 600)
+        self.setWindowTitle(_translate("mainWindow", "Code Elixer L", None))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
-        self.setMaximumSize(QtCore.QSize(500, 500))
+        self.setMaximumSize(QtCore.QSize(700, 500))
         self.centralwidget = QtGui.QWidget(self)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         #self.buttonBox = QtGui.QDialogButtonBox(self)
@@ -63,6 +63,7 @@ class leaderboard(QtGui.QDialog):
         self.verticalLayout = QtGui.QVBoxLayout(self)
         self.verticalLayout.addWidget(self.LeadView)
         #self.verticalLayout.addWidget(self.buttonBox)
+
 
 class Ui_mainWindow(object):
 
@@ -90,6 +91,7 @@ class Ui_mainWindow(object):
         label_19= ""
         label_20= ""
         menuFile= ""
+        fileName= ""
         actionProgram_file= ""
         actionProgram_folder= ""
         lb = ""
@@ -105,6 +107,14 @@ class Ui_mainWindow(object):
         self.ui.module.db = setupDB()
         self.ui.module.save = setupsave()
         self.ui.lb = leaderboard()
+        self.ui.lb.LeadView.clear()
+        self.ui = CheckDB(self.ui)
+        self.ui = getboard(self.ui)
+        self.ui = self.ui.module.save.rowobjs(self.ui)
+        self.ui.lb.LeadView.addItem("|id\t|var\t|const\t|fun\t|memory\t|loc\t|calls\t|")
+        for i in range(len(self.ui.module.save.projs)):
+            self.ui.lb.LeadView.addItem("|"+str(self.ui.module.save.projs[i].id)+"\t|"+str(self.ui.module.save.projs[i].var)+"\t|"+str(self.ui.module.save.projs[i].const)+"\t|"+str(self.ui.module.save.projs[i].func)+"\t|"+str(self.ui.module.save.projs[i].memory)+"\t|"+str(self.ui.module.save.projs[i].loc)+"\t|"+str(self.ui.module.save.projs[i].calls)+"\t|")
+
 
 
     def setupUi(self, mainWindow):
@@ -309,7 +319,7 @@ class Ui_mainWindow(object):
         self.ui.label_5.setText(_translate("mainWindow", "Variables", None))
         self.ui.label_6.setText(_translate("mainWindow", "Memory", None))
         self.ui.label_7.setText(_translate("mainWindow", "var count", None))
-        self.ui.label_8.setText(_translate("mainWindow", "Used", None))
+        self.ui.label_8.setText(_translate("mainWindow", "Total", None))
         self.ui.label_9.setText(_translate("mainWindow", "Unused", None))
         self.ui.label_10.setText(_translate("mainWindow", "Functions", None))
         self.ui.label_11.setText(_translate("mainWindow", "Calls", None))
@@ -342,8 +352,7 @@ class Ui_mainWindow(object):
         self.ui = fileLoad(self.ui)
         self.ui = fetchConstants(self.ui)
         self.ui = loopanalyse(self.ui)
-        self.ui = CheckDB(self.ui)
-        self.ui = getboard(self.ui)
+        self.ui.module.save.cursor = self.ui.module.filemgr.cursor
         self.ui.ConstantMemory.setText(str(self.ui.module.constant.const_memory) + " Byte")
         self.printTerminal("Total Constants Found "+str(self.ui.module.gloable.constant_count))
         self.ui = fetchVariables(self.ui)
@@ -355,10 +364,11 @@ class Ui_mainWindow(object):
 #...........Mohan's part...............
 #...........Manoj's part...............
         self.ui = fileLoad(self.ui)
-        self.ui.FunctionCombo.currentIndexChanged.connect(self.change_rec)
         self.ui = fetchFunctions(self.ui)
-        self.ui.FunctionCalls.setText(str(self.ui.module.gloable.function_count) + " Functions")
-        self.printtree("functions found" + str(self.ui.module.functions.fn_used))
+        self.ui.FunctionCombo.currentIndexChanged.connect(self.change_rec)
+        #self.ui.FunctionCalls.setText(str(self.ui.module.gloable.function_count) + " Functions")
+        #self.printtree("functions found" + str(self.ui.module.functions.fn_used))
+        self.ui.TotalCallsMade.setText(str(self.ui.module.gloable.total_Calls))
 #............Manoj's part....................
         self.printTerminal("Total Functions found"+ str(self.ui.module.gloable.function_count))
         # print(len(self.ui.module.gloable.int_var))
@@ -370,8 +380,11 @@ class Ui_mainWindow(object):
         # print(len(self.ui.module.gloable.bool_var))
         # print(len(self.ui.module.gloable.byte))
         self.ui.TotalMemory.setText(str(len(self.ui.module.gloable.int_var)*2+len(self.ui.module.gloable.float_var)*4+len(self.ui.module.gloable.char_var)+len(self.ui.module.gloable.double_var)*8+len(self.ui.module.gloable.short_var)*1+len(self.ui.module.gloable.long_var)*4+len(self.ui.module.gloable.bool_var)*1+len(self.ui.module.gloable.byte)+self.ui.module.gloable.arr_size)+" Bytes")
+        self.ui.module.gloable.project_Memeory = len(self.ui.module.gloable.int_var)*2+len(self.ui.module.gloable.float_var)*4+len(self.ui.module.gloable.char_var)+len(self.ui.module.gloable.double_var)*8+len(self.ui.module.gloable.short_var)*1+len(self.ui.module.gloable.long_var)*4+len(self.ui.module.gloable.bool_var)*1+len(self.ui.module.gloable.byte)+self.ui.module.gloable.arr_size
         self.printTerminal("Total LOC"+str(self.ui.module.gloable.total_LOC))
         self.ui.TotalLoc.setText(str(self.ui.module.gloable.total_LOC))
+        self.ui = self.ui.module.save.rankmaker(self.ui)
+        self.scanner()
 
 #...........Mohan's part...............
     def change(self):
@@ -398,8 +411,9 @@ class Ui_mainWindow(object):
         self.ui.FolderPath.setText(str(folderName)+"/")
 
     def savebrowse(self):
-        fileName = QtGui.QFileDialog.getSaveFileName(None, 'Dialog Title', '/home/', selectedFilter='*.elixer')
-        file = file.open(filename,'w+')
+        self.ui.fileName = QtGui.QFileDialog.getSaveFileName(None, 'Dialog Title', '/home/ghostranger', selectedFilter='*.elixer')
+        self.ui.fileName = self.ui.fileName+".elixer"
+        self.ui = self.ui.module.save.savestate(self.ui)
 
 
     def clearimpgloable(self):
@@ -417,9 +431,20 @@ class Ui_mainWindow(object):
         try:
             var = self.ui.FunctionCombo.currentText()
             self.ui.RecursiveCalls.setText(str(self.ui.module.functions.is_recursive[str(var)]))
+            self.ui.FunctionCalls.setText(str(self.ui.module.functions.fn_count[str(var)]))
         except KeyError:
             pass
 
+    def scanner(self):
+        count = self.ui.module.filemgr.file_count
+        for i in range(count):
+            fp = self.ui.module.filemgr.getFilePointer(i,"r")
+            text = fp.pointer.read()
+            for j in self.ui.module.gloable.fun_names:
+                start = self.ui.module.gloable.start_end[j][0]
+                end = self.ui.module.gloable.start_end[j][1]
+                print(text[start:end])
+                print("**********")
 
     def printtree(self,value):
         self.ui.ComplexView.addItem(value)

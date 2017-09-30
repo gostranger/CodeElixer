@@ -7,6 +7,7 @@ import re
 class fbox:
     #write all the function and variable in this
     fn_used=[]
+    fn_call=[]
     fn_count ={}
     no_of_rec_calls=0
     is_recursive = {}
@@ -19,7 +20,7 @@ def fetchFunctions(module):
     for i in range(count):
         filepointer = module.module.filemgr.getFilePointer(i,"r")
         extension = filepointer.ext.lower()
-        if filepointer.ext.lower() == "c" or filepointer.ext.lower() == "java" or filepointer.ext.lower() == "cpp":
+        if filepointer.ext.lower() == "c" or filepointer.ext.lower() == "java" or filepointer.ext.lower() == "cpp" or filepointer.ext.lower() == "py":
             module.Terminal.addItem("Checking Functions in "+ str(filepointer.name))
             module = checkFunctions(module,filepointer,extension)
     return module
@@ -28,11 +29,15 @@ fn=[]
 fn_names=[]
 bcount=[]
 fn_codes ={}
+start_end = {}
 def is_recursive_fn(module,string,line):
+    fn_code=""
     if "main()" not in string:
+        start = ""
+        end = ""
         main_index=line.index("main()")
+
         fn_name=""
-        fn_code=""
         fn_code1=""
         bkt_count = 0
         fn_index = 0
@@ -46,6 +51,8 @@ def is_recursive_fn(module,string,line):
             fn_index = line.rindex(string)
         else:
             fn_index = line.index(string)
+
+        start = fn_index
         #print("Position of function "+ string + str(fn_index))
         try:
             for i in string[0:string.index("(")]:
@@ -60,7 +67,7 @@ def is_recursive_fn(module,string,line):
         except Exception:
             print("Syntax error")
             pass
-        ##print(fn_names)
+        #print(fn_names)
         if fn_index < main_index:
             for i in line[fn_index:main_index]:
                 if bkt_count!=0 or flag == False:
@@ -90,19 +97,54 @@ def is_recursive_fn(module,string,line):
                     else:
                         fn_code+=i
         fn_codes[temp] =fn_code
-        ##print(fn_code)
+        end = len(fn_code)
+        start_end[temp] = [start,start+end]
+        module.module.gloable.fun_names.append(temp)
+        #print(fn_codes)
         if temp in fn_code[fn_code.index("{"):]:
             #print(temp + " is recursive")
             module.module.functions.is_recursive[string] = "Recursive"
             module.module.functions.fn_count[string]="n"
+            module.module.functions.fn_call.append(1)
+            module.module.gloable.total_Calls+=1
         else:
             #print(temp + " is not recursive")
             module.module.functions.is_recursive[string] = "Non-Recursive"
             module.module.functions.fn_count[string]=matchNum
-    elif "main()" in string:
+            module.module.functions.fn_call.append(matchNum)
+            module.module.gloable.total_Calls+=matchNum
+    if "main()" in string:
+        start = ""
+        end = ""
         module.module.functions.is_recursive[string] = "Non - Recursive"
-        fn_codes["main"] = 1
+        main_index=line.index("main()")
+        start = main_index
+        bkt_count = 0
+        flag = False
+        for i in line[main_index:]:
+            if bkt_count!=0 or flag == False:
+                if i =="{":
+                    bkt_count+=1
+                    fn_code+=i
+                elif i =="}":
+                    fn_code+=i
+                    bkt_count-=1
+                    if bkt_count==0:
+                        flag=True
+                        break
+                else:
+                    fn_code+=i
+        fn_codes["main"] = fn_code
+        module.module.gloable.ffff = fn_codes
         module.module.functions.fn_count[string]=1
+        module.module.functions.fn_call.append(1)
+        module.module.gloable.total_Calls+=1
+        end = len(fn_code)
+        start_end["main"] = [start,start+end]
+        module.module.gloable.fun_names.append("main")
+        #print(fn_codes)
+        #print(start_end)
+        module.module.gloable.start_end = start_end
     return module
 
 def fn_tree(module,fn_in_file,line,fn_codes):
@@ -120,7 +162,7 @@ def fn_tree(module,fn_in_file,line,fn_codes):
     try:
         fn_prot_name.remove("main")
     except Exception:
-        print("Check syntax of file")
+        #print("Check syntax of file")
         pass
     fn_stack1 = ""
     for i in range(len(fn_prot_name)):
@@ -157,8 +199,6 @@ def checkFunctions(module,filepointer,extension):
     #print(module.module.functions.is_recursive)
     return module
 #----------------------write the code above--------------------------------
-
-
 #manditory do not delete
 def setupFunction():
     return fbox()
